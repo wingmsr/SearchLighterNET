@@ -2,6 +2,7 @@
 A light-weight .NET library for highlighting search text within results. Injects differential highlighting-markup for exact or partial (word) matches. Supports configuration of exact and partial-match markup, sanitization (e.g. angle-brackets) and escape (e.g. new-line) string maps, "stop-words", word-boundary characters, and minimum match-length thresholds.
 
 C# Usage:
+
 (1)	Add a reference to the SearchLighterNET.dll or SearchLighterNET.csproj, and use it in your code:
 
         using SearchLighterNET;
