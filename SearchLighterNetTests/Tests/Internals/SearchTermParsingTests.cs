@@ -1,6 +1,6 @@
 using System;
-using Earthfires.Foundation.Libraries.Tools.TestingTools.Helpers;
 using NUnit.Framework;
+using SearchLighterNetTests.Helpers;
 using SearchLighterNET;
 
 namespace SearchLighterNetTests.Tests.Internals

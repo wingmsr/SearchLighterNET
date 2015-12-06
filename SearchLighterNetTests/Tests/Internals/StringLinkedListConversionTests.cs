@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Earthfires.Foundation.Libraries.Tools.TestingTools.Helpers;
 using NUnit.Framework;
+using SearchLighterNetTests.Helpers;
 using SearchLighterNET;
 
 namespace SearchLighterNetTests.Tests.Internals
