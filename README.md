@@ -14,7 +14,7 @@ C# Usage:
 		string highlighted = SearchLighter.GetDisplayString(text, find);
 		string expectedOutput = "The quick brown fox<br /><span class=\"hlt1\">jumped over</span><br />and <span class=\"hlt2\">over</span> the &lt;lazy&gt;dog&lt;/lazy&gt;.";
 		Assert.AreEqual(string.Compare(highlighted, expectedOutput, StringComparison.CurrentCulture), 0);
-		//Or if you are presenting text without any search filter, simply pass an empty-string for the "find" parameter
+		//Or if you are presenting text without any search filter, simply omit the "find" parameter or pass an empty-string
 		string normal = SearchLighter.GetDisplayString(text, "");
 			
 (3)	Advanced usage: Configure any non default settings via static-method calls, e.g.:
