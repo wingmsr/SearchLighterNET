@@ -10,7 +10,7 @@ namespace SearchLighterNetTests.Tests
     public class PublicExpectationTestsV2
     {
         [TestCase("why hello there sir", "hello there", "why 1hello there11 sir")]
-        [TestCase("why HELLO there sir", "hello there", "why 1HELLO there11 sir")]
+        [TestCase("why HELLO there ma'am", "hello there", "why 1HELLO there11 ma'am")]
         [TestCase("why hello there sir", "HELLO there", "why 1hello there11 sir")]
         public void Vanilla(string initial, string find, string expected)
         {
@@ -19,7 +19,7 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("why hell° there •ir", "", "why hell^ there $ir")]
+        [TestCase("why hell° there •a'am", "", "why hell^ there $a'am")]
         [TestCase("why HELL° there •ir", "", "why HELL^ there $ir")]
         public void CanSanitizeTestSanitizationChars(string initial, string find, string expected)
         {
@@ -28,9 +28,9 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("why hell^ there •ir", "hell° there", "why 1hell^ there11 $ir")]
+        [TestCase("why hell^ there •a'am", "hell° there", "why 1hell^ there11 $a'am")]
         [TestCase("why HELL^ there •ir", "hell° there", "why 1HELL^ there11 $ir")]
-        [TestCase("why hell^ there •ir", "HELL° there", "why 1hell^ there11 $ir")]
+        [TestCase("why hell^ there •a'am", "HELL° there", "why 1hell^ there11 $a'am")]
         public void SearchSanitizationAllowsForExactMatching(string initial, string find, string expected)
         {
             var sl = getSearchLighterWithTestSettings();
@@ -39,7 +39,7 @@ namespace SearchLighterNetTests.Tests
         }
 
         [TestCase("why hell° there •ir", "hell^ there", "why 1hell^ there11 $ir")]
-        [TestCase("why HELL° there •ir", "hell^ there", "why 1HELL^ there11 $ir")]
+        [TestCase("why HELL° there •a'am", "hell^ there", "why 1HELL^ there11 $a'am")]
         [TestCase("why hell° there •ir", "HELL^ there", "why 1hell^ there11 $ir")]
         public void TargetSanitizationAllowsForMatching(string initial, string find, string expected)
         {
@@ -48,9 +48,9 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("why hell° there •ir", "hell° there", "why 1hell^ there11 $ir")]
+        [TestCase("why hell° there •a'am", "hell° there", "why 1hell^ there11 $a'am")]
         [TestCase("why HELL° there •ir", "hell° there", "why 1HELL^ there11 $ir")]
-        [TestCase("why hell° there •ir", "HELL° there", "why 1hell^ there11 $ir")]
+        [TestCase("why hell° there •a'am", "HELL° there", "why 1hell^ there11 $a'am")]
         public void SearchAndTargetSanitizationAllowsForMatching(string initial, string find, string expected)
         {
             var sl = getSearchLighterWithTestSettings();
@@ -87,7 +87,7 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("why hell° there •ir", "hell°•br /° there", "why 1hell^ there11 $ir")]
+        [TestCase("why hell° there •a'am", "hell°•br /° there", "why 1hell^ there11 $a'am")]
         public void EscapeMarkupInSearchButNotTarget_EscapeSequenceEliminatedFromSearchAllowsExactMatch(string initial, string find, string expected)
         {
             /*** note: scrubbing line-breaks from search terms ***/
