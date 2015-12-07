@@ -13,8 +13,7 @@ namespace SearchLighterNetTests.Tests.Internals
         [TestCase("a<<<BR/>BR/>>b", "a&lt;&lt;<br />BR/&gt;&gt;b")]
         public void CanNormalizeLineBreaksAndSanitizeMalformedLineBreak(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var s = SearchLighter.GetDisplayString(initial, "");
+            var s = new SearchLighter().GetDisplayString(initial, "");
             s.ShouldEqualCaseSensitive(expected);
         }
 
@@ -24,9 +23,8 @@ namespace SearchLighterNetTests.Tests.Internals
             TestName = "sanitize kills any malformed escape-markup (br default)")]
         public void CanSanitizeButHonorEscapeMarkup(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var result = SearchLighter.GetDisplayString(initial, "");
-            expected.ShouldEqualCaseSensitive(result);
+            var s = new SearchLighter().GetDisplayString(initial, "");
+            expected.ShouldEqualCaseSensitive(s);
         }
     }
 }

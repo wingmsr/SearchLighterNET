@@ -21,22 +21,22 @@ namespace SearchLighterNetTests.Tests.Internals
         public void CanSanitizeMultiCharSequenceCaseInsensitively(string sanitizeInit1, string sanitizeFinal1, string sanitizeInit2,
             string sanitizeFinal2, string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.SetSanitizationMap(new string[][]
+            var sl = new SearchLighter();
+            sl.SetSanitizationMap(new string[][]
             {
                 new string[] {sanitizeInit1, sanitizeFinal1},
                 new string[] {sanitizeInit2, sanitizeFinal2}
             });
-            var s = SearchLighter.GetDisplayString(initial, "");
+            var s = sl.GetDisplayString(initial, "");
             s.ShouldEqualCaseSensitive(expected);
         }
 
         [TestCase("a<<<BR/>BR/>>b", "a<<<BR/>BR/>>b")]
         public void ShouldNotSanitizeWhenDisabled(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.SetShouldSanitizeAndEscape(false);
-            var s = SearchLighter.GetDisplayString(initial, "");
+            var sl = new SearchLighter();
+            sl.SetShouldSanitizeAndEscape(false);
+            var s = sl.GetDisplayString(initial, "");
             s.ShouldEqualCaseSensitive(expected);
         }
 
@@ -67,8 +67,7 @@ namespace SearchLighterNetTests.Tests.Internals
             TestName = "sanitize kills any non-br angle-brackets - complex opening tag")]
         public void CanSanitize(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var result = SearchLighter.GetDisplayString(initial, "");
+            var result = new SearchLighter().GetDisplayString(initial, "");
             expected.ShouldEqualCaseSensitive(result);
         }
     }

@@ -13,15 +13,13 @@ namespace SearchLighterNetTests.Tests
         [Test]
         public void GoldenPath()
         {
-            SearchLighter.HighlighterResetToDefaults();
-
             /* Note: The HTML-friendly default "escape-markup" includes the most common variants of new-line characters and line-break HTML.
              * Other markup is partially HTML-encoded by default, i.e. "angle-brackets" are HTML-encoded to "sanitize" the output.
              * See the Unit-Test suite for expected behavior of edge-cases.
              */
             string find = "jumped OVER";
             string text = "The quick brown fox\r\njumped over<BR/>and over the <lazy>dog</lazy>.";
-            string highlighted = SearchLighter.GetDisplayString(text, find);
+            string highlighted = new SearchLighter().GetDisplayString(text, find);
 
             string expectedOutput = "The quick brown fox<br /><span class=\"hlt1\">jumped over</span><br />and <span class=\"hlt2\">over</span> the &lt;lazy&gt;dog&lt;/lazy&gt;.";
             Assert.AreEqual(string.Compare(highlighted, expectedOutput, StringComparison.CurrentCulture), 0);
@@ -30,10 +28,10 @@ namespace SearchLighterNetTests.Tests
         [TestCase("?@[\\]the quick brown FOX_`{|", "BROWN fox", "?@[\\]the quick STARTbrown FOXSTOP_`{|")]
         public void CanMakeAsciiCaseInsensitiveHighlight(string initial, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.SetExactMatchOpenMarkup("START");
-            SearchLighter.SetExactMatchCloseMarkup("STOP");
-            var result = SearchLighter.GetDisplayString(initial, find);
+            var sl = new SearchLighter();
+            sl.SetExactMatchOpenMarkup("START");
+            sl.SetExactMatchCloseMarkup("STOP");
+            var result = sl.GetDisplayString(initial, find);
 
             expected.ShouldEqualCaseSensitive(result);
         }
@@ -41,10 +39,10 @@ namespace SearchLighterNetTests.Tests
         [TestCase("?@[\\]the quick brown FOX_`{|", "BROWN fox", "?@[\\]the quick 1brown FOX2_`{|")]
         public void CanMakeAsciiCaseInsensitiveHighlightWithSingleCharTag(string initial, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.SetExactMatchOpenMarkup("1");
-            SearchLighter.SetExactMatchCloseMarkup("2");
-            var result = SearchLighter.GetDisplayString(initial, find);
+            var sl = new SearchLighter();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("2");
+            var result = sl.GetDisplayString(initial, find);
 
             expected.ShouldEqualCaseSensitive(result);
         }
@@ -69,29 +67,29 @@ namespace SearchLighterNetTests.Tests
         [TestCase("......", "...", "11...11111...111", TestName = "tandem repeat dots; do not orphan tail highlight closing tag")]
         public void CanGetHighlightedStringBasic(string look, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.SetExactMatchOpenMarkup("11");
-            SearchLighter.SetExactMatchCloseMarkup("111");
-            SearchLighter.SetPartialMatchOpenMarkup("2222");
-            SearchLighter.SetPartialMatchCloseMarkup("22222");
+            var sl = new SearchLighter();
+            sl.SetExactMatchOpenMarkup("11");
+            sl.SetExactMatchCloseMarkup("111");
+            sl.SetPartialMatchOpenMarkup("2222");
+            sl.SetPartialMatchCloseMarkup("22222");
 
-            var t = SearchLighter.GetDisplayString(look, find);
+            var t = sl.GetDisplayString(look, find);
             expected.ShouldEqualCaseSensitive(t);
         }
 
         [TestCase("bc def bc def bc def", "c def bc", "b1c def bc11 2def22 2bc22 2def22", TestName = "overlapping exact matches takesfirst only and the rest fall back to word-partial matches")]
         public void SecondaryDoesNotPreemptExactMatch(string look, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.SetExactMatchOpenMarkup("1");
-            SearchLighter.SetExactMatchCloseMarkup("11");
-            SearchLighter.SetPartialMatchOpenMarkup("2");
-            SearchLighter.SetPartialMatchCloseMarkup("22");
+            var sl = new SearchLighter();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            sl.HighlighterClearSkipWords();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
 
-            var t = SearchLighter.GetDisplayString(look, find);
+            var t = sl.GetDisplayString(look, find);
             expected.ShouldEqualCaseSensitive(t);
         }
 
@@ -99,16 +97,17 @@ namespace SearchLighterNetTests.Tests
         [TestCase("abababaabababa", "baba x aba", "2aba222baba222aba222baba22")]
         public void SecondaryPreemptsLongerSecondaryMatchToPreservePerformance(string look, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.SetExactMatchOpenMarkup("1");
-            SearchLighter.SetExactMatchCloseMarkup("11");
-            SearchLighter.SetPartialMatchOpenMarkup("2");
-            SearchLighter.SetPartialMatchCloseMarkup("22");
+            var sl = new SearchLighter();
+            sl.HighlighterResetToDefaults();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            sl.HighlighterClearSkipWords();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
 
-            var t = SearchLighter.GetDisplayString(look, find);
+            var t = sl.GetDisplayString(look, find);
             expected.ShouldEqualCaseSensitive(t);
         }
 
@@ -203,16 +202,17 @@ namespace SearchLighterNetTests.Tests
         [TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc abcd ab", "a ab a1bc abcd ab11cde abcdef")]
         public void CanGetHighlightedStringWithMinimumCharThresholds(int minExactMatchLength, int minWordMatchLength, string look, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(minExactMatchLength);
-            SearchLighter.HighlighterSetWordMinLength(minWordMatchLength);
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.SetExactMatchOpenMarkup("1");
-            SearchLighter.SetExactMatchCloseMarkup("11");
-            SearchLighter.SetPartialMatchOpenMarkup("2");
-            SearchLighter.SetPartialMatchCloseMarkup("22");
+            var sl = new SearchLighter();
+            sl.HighlighterResetToDefaults();
+            sl.HighlighterSetExactMatchMinLength(minExactMatchLength);
+            sl.HighlighterSetWordMinLength(minWordMatchLength);
+            sl.HighlighterClearSkipWords();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
 
-            var t = SearchLighter.GetDisplayString(look, find);
+            var t = sl.GetDisplayString(look, find);
             expected.ShouldEqualCaseSensitive(t);
         }
 
@@ -220,16 +220,17 @@ namespace SearchLighterNetTests.Tests
         [TestCase(1, 1, "this has<br> a faulty line break", "A GOOD LINE", "this h2a22s&lt;br&gt; 2a22 f2a22ulty 2line22 bre2a22k")]
         public void CanGetHighlightedStringHandlesEmbeddedLineBreaks(int minExactMatchLength, int minWordMatchLength, string look, string find, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(minExactMatchLength);
-            SearchLighter.HighlighterSetWordMinLength(minWordMatchLength);
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.SetExactMatchOpenMarkup("1");
-            SearchLighter.SetExactMatchCloseMarkup("11");
-            SearchLighter.SetPartialMatchOpenMarkup("2");
-            SearchLighter.SetPartialMatchCloseMarkup("22");
+            var sl = new SearchLighter();
+            sl.HighlighterResetToDefaults();
+            sl.HighlighterSetExactMatchMinLength(minExactMatchLength);
+            sl.HighlighterSetWordMinLength(minWordMatchLength);
+            sl.HighlighterClearSkipWords();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
 
-            var t = SearchLighter.GetDisplayString(look, find);
+            var t = sl.GetDisplayString(look, find);
             expected.ShouldEqualCaseSensitive(t);
         }
 
@@ -245,8 +246,7 @@ namespace SearchLighterNetTests.Tests
         [TestCase("the quick BROWN@fox <xxx>\r\njumped</xxx> OVER the lazy-dog!\n\n", "the quick BROWN@fox &lt;xxx&gt;<br />jumped&lt;/xxx&gt; OVER the lazy-dog!<br /><br />")]
         public void CanGetNormalString(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var t = SearchLighter.GetDisplayString(initial, "");
+            var t = new SearchLighter().GetDisplayString(initial, "");
             expected.ShouldEqualCaseSensitive(t);
         }
     }

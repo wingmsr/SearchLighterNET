@@ -10,8 +10,7 @@ namespace SearchLighterNetTests.Tests.Internals
         [TestCase("<br />a<br />b<br />c<br />d<br /><br />", "<br />a<br />b<br />c<br />d<br /><br />")]
         public void CanPreserveNormalLineBreaks(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var s = SearchLighter.GetDisplayString(initial, "");
+            var s = new SearchLighter().GetDisplayString(initial, "");
             s.ShouldEqualCaseSensitive(expected);
         }
 
@@ -19,16 +18,14 @@ namespace SearchLighterNetTests.Tests.Internals
         [TestCase("\r\na\r\nb\r\nc\r\nd\r\n\r\n", "<br />a<br />b<br />c<br />d<br /><br />")]
         public void CanConvertNewLineChars(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var s = SearchLighter.GetDisplayString(initial, "");
+            var s = new SearchLighter().GetDisplayString(initial, "");
             s.ShouldEqualCaseSensitive(expected);
         }
 
         [TestCase("<br/>a<BR />b<BR/>c<br/>d<br/><br />", "<br />a<br />b<br />c<br />d<br /><br />")]
         public void CanNormalizeImperfectLineBreaks(string initial, string expected)
         {
-            SearchLighter.HighlighterResetToDefaults();
-            var s = SearchLighter.GetDisplayString(initial, "");
+            var s = new SearchLighter().GetDisplayString(initial, "");
             s.ShouldEqualCaseSensitive(expected);
         }
     }

@@ -17,12 +17,13 @@ namespace SearchLighterNetTests.Tests
             var text = performanceTestGateway(out find);
 
             Stopwatch s = new Stopwatch();
-            SearchLighter.HighlighterResetToDefaults();
+           
             s.Start();
             
             for (int i = 0; i < 30000; i++)
             {
-                var t = SearchLighter.GetDisplayString(text + i, find);
+                //test overhead of new instance initialization
+                var t = new SearchLighter().GetDisplayString(text + i, find);
             }
 
             s.Stop();
@@ -35,9 +36,7 @@ namespace SearchLighterNetTests.Tests
         public void PerformanceTestWarAndPeace(string file, int msecLimit, string find)
         {
             string f0;
-            var t0 = performanceTestGateway(out f0);
-
-            SearchLighter.HighlighterResetToDefaults();
+            var t0 = performanceTestGateway(out f0);           
 
             string dir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
 
@@ -54,7 +53,7 @@ namespace SearchLighterNetTests.Tests
             Stopwatch s = new Stopwatch();
             s.Start();
             
-            var t = SearchLighter.GetDisplayString(text, find);
+            var t = new SearchLighter().GetDisplayString(text, find);
 
             s.Stop();
             Console.WriteLine(file + " performance test elapsed time (msec): " + s.Elapsed.TotalMilliseconds);
@@ -72,8 +71,7 @@ namespace SearchLighterNetTests.Tests
             var expected =
                 "the&lt;br&gt; &lt;xxx&gt;quick&lt;/xxx&gt; <span class=\"hlt2\">BROWN@fox</span> <br /><span class=\"hlt2\">jumped</span> <span class=\"hlt2\">OVER</span> the<br />lazy-dog!<br /><br />";
 
-            SearchLighter.HighlighterResetToDefaults();
-            var t0 = SearchLighter.GetDisplayString(text + 1, find);
+            var t0 = new SearchLighter().GetDisplayString(text + 1, find);
             (expected + 1).ShouldEqualCaseSensitive(t0);
             return text;
         }

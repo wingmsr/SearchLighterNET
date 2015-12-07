@@ -24,11 +24,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterClearSkipWords();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -44,10 +44,10 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -63,11 +63,12 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            SearchLighter.HighlighterAddSkipWords();
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            sl.HighlighterAddSkipWords();
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -83,11 +84,12 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            SearchLighter.HighlighterAddSkipWords("");
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            sl.HighlighterAddSkipWords("");
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -103,13 +105,13 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            SearchLighter.HighlighterAddSkipWords("REGISTERED", "ADHERED", "DRIVER", "STATE", "WHERE", "WENT", "CAR");
+            var sl = new SearchLighter();
+            sl.HighlighterClearSkipWords();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            sl.HighlighterAddSkipWords("REGISTERED", "ADHERED", "DRIVER", "STATE", "WHERE", "WENT", "CAR");
 
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -125,11 +127,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            SearchLighter.HighlighterAddSkipWords("REGISTERED", "ADHERED", "DRIVER", "STATE", "WHERE", "WENT", "CAR");
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            sl.HighlighterAddSkipWords("REGISTERED", "ADHERED", "DRIVER", "STATE", "WHERE", "WENT", "CAR");
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -156,11 +158,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.HighlighterSetExactMatchMinLength(minWordLength);
-            SearchLighter.HighlighterSetWordMinLength(minWordLength);
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterClearSkipWords();
+            sl.HighlighterSetExactMatchMinLength(minWordLength);
+            sl.HighlighterSetWordMinLength(minWordLength);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -174,11 +176,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(minWordLength);
-            SearchLighter.HighlighterSetWordMinLength(minWordLength);
-            SearchLighter.HighlighterAddSkipWords("permutation", "confusion");
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterSetExactMatchMinLength(minWordLength);
+            sl.HighlighterSetWordMinLength(minWordLength);
+            sl.HighlighterAddSkipWords("permutation", "confusion");
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -192,11 +194,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.HighlighterSetExactMatchMinLength(minExactLength);
-            SearchLighter.HighlighterSetWordMinLength(minWordLength);
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterClearSkipWords();
+            sl.HighlighterSetExactMatchMinLength(minExactLength);
+            sl.HighlighterSetWordMinLength(minWordLength);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -210,11 +212,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterSetExactMatchMinLength(minExactLength);
-            SearchLighter.HighlighterSetWordMinLength(minWordLength);
-            SearchLighter.HighlighterAddSkipWords("eeeee");
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterSetExactMatchMinLength(minExactLength);
+            sl.HighlighterSetWordMinLength(minWordLength);
+            sl.HighlighterAddSkipWords("eeeee");
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -233,11 +235,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterClearSkipWords();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {
@@ -250,11 +252,11 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             var expected = expectedCsvTerms.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-            SearchLighter.HighlighterResetToDefaults();
-            SearchLighter.HighlighterClearSkipWords();
-            SearchLighter.HighlighterSetExactMatchMinLength(1);
-            SearchLighter.HighlighterSetWordMinLength(1);
-            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(search);
+            var sl = new SearchLighter();
+            sl.HighlighterClearSkipWords();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(1);
+            var t = SearchLighter.SearchLighterUtils.getSortedSearchTerms(sl, search);
             expected.Length.ShouldEqual(t.Length);
             for (int i = 0; i < expected.Length; i++)
             {

@@ -79,7 +79,7 @@ namespace SearchLighterNetTests.Tests.Internals
         {
             //no line-breaks or sanitization required here
             string test = "THe qUiCk BroWn fox jumped over the \"lazy\" dog!";
-            var s = SearchLighter.GetDisplayString(test, "");
+            var s = new SearchLighter().GetDisplayString(test, "");
             s.ShouldEqualCaseSensitive(test);
         }
 
@@ -135,7 +135,7 @@ namespace SearchLighterNetTests.Tests.Internals
             Console.WriteLine("timeToString: " + timeToString + " msec");
             stopwatch.Reset();
 
-            (timeToLinkedList < 500).ShouldBeTrue();
+            (timeToLinkedList < 800).ShouldBeTrue();
             (timeToString < 250).ShouldBeTrue();
             text.Length.ShouldEqual(text2.Length);
             Console.WriteLine("text length: " + text.Length);

@@ -6,7 +6,7 @@ using System.Linq;
 //see when porting: http://www.i-programmer.info/programming/javascript/5328-javascript-data-structures-the-linked-list.html
 namespace SearchLighterNET
 {
-    public static class SearchLighter
+    public class SearchLighter
     {
         internal static class SearchLighterUtils
         {
@@ -60,17 +60,17 @@ namespace SearchLighterNET
                 return new string(result);
             }
 
-            internal static void _escapeOrSanitize(ref LinkedListNode<CharData> c, LinkedList<CharData> ll)
+            internal static void _escapeOrSanitize(SearchLighter sl, ref LinkedListNode<CharData> c, LinkedList<CharData> ll)
             {
-                if (!_processCurrentChar(ref c, ll, _escapeMarkupMap))
+                if (!_processCurrentChar(sl, ref c, ll, sl._escapeMarkupMap))
                 {
-                    _processCurrentChar(ref c, ll, _sanitizationMap);
+                    _processCurrentChar(sl, ref c, ll, sl._sanitizationMap);
                 }                
             }
 
-            internal static bool _processCurrentChar(ref LinkedListNode<CharData> c, LinkedList<CharData> ll, string[][] map)
+            internal static bool _processCurrentChar(SearchLighter sl, ref LinkedListNode<CharData> c, LinkedList<CharData> ll, string[][] map)
             {
-                if (!_shouldSanitizeAndEscape)
+                if (!sl._shouldSanitizeAndEscape)
                     return false;
 
                 for (int i = 0; i < map.Length; i++)
@@ -157,16 +157,16 @@ namespace SearchLighterNET
                 return true;
             }
 
-            internal static void _replaceWithLineBreak(ref LinkedListNode<CharData> c, LinkedList<CharData> ll)
+            internal static void _replaceWithLineBreak(SearchLighter sl, ref LinkedListNode<CharData> c, LinkedList<CharData> ll)
             {
                 var n = c.Next;
-                var cur = new LinkedListNode<CharData>(new CharData() { Char = _br[0] });
+                var cur = new LinkedListNode<CharData>(new CharData() { Char = sl._br[0] });
                 ll.AddBefore(c, cur);
                 ll.Remove(c);
                 c = cur;
-                for (int i = 1; i < _br.Length; i++)
+                for (int i = 1; i < sl._br.Length; i++)
                 {
-                    cur = new LinkedListNode<CharData>(new CharData() { Char = _br[i] });
+                    cur = new LinkedListNode<CharData>(new CharData() { Char = sl._br[i] });
                     ll.AddAfter(c, cur);
                     c = cur;
                 }
@@ -211,20 +211,20 @@ namespace SearchLighterNET
                 return true;
             }
 
-            private static bool _shouldHighlightAnyMapItemAtCurrentChar(string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, int i)
+            private static bool _shouldHighlightAnyMapItemAtCurrentChar(SearchLighter sl, string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, int i)
             {
                 if (searchMap[i][0] != c.Value.Char)
                     return false;
 
                 if (searchMap[i].Length == 1)
                 {
-                    return _applyHighlight(i == 0, ll, ref c, ref c, searchMap[i], searchMap[0]);
+                    return _applyHighlight(sl, i == 0, ll, ref c, ref c, searchMap[i], searchMap[0]);
                 }
 
                 var endAfter = c;
                 if (SearchLighterUtils._shouldHighlightCurrentMapItem(searchMap, i, ref endAfter))
                 {
-                    return _applyHighlight(i == 0, ll, ref c, ref endAfter, searchMap[i], searchMap[0]);
+                    return _applyHighlight(sl, i == 0, ll, ref c, ref endAfter, searchMap[i], searchMap[0]);
                 }
                 else
                 {
@@ -232,11 +232,11 @@ namespace SearchLighterNET
                 }
             }
 
-            internal static void _matchAndHighlight(string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c)
+            internal static void _matchAndHighlight(SearchLighter sl, string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c)
             {
                 for (int i = 0; i < searchMap.Length; i++)
                 {
-                    if (SearchLighterUtils._shouldHighlightAnyMapItemAtCurrentChar(searchMap, ll, ref c, i))
+                    if (SearchLighterUtils._shouldHighlightAnyMapItemAtCurrentChar(sl, searchMap, ll, ref c, i))
                     {
                         return;
                     }
@@ -269,21 +269,21 @@ namespace SearchLighterNET
                 return false;
             }
 
-            private static bool _applyHighlight(bool exact, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, ref LinkedListNode<CharData> endAfter, string currentMatch, string exactMatch)
+            private static bool _applyHighlight(SearchLighter sl, bool exact, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, ref LinkedListNode<CharData> endAfter, string currentMatch, string exactMatch)
             {
                 LinkedListNode<CharData> resume = null;
                 if (exact)
                 {
-                    for (int i = 0; i < _o1.Length; i++)
+                    for (int i = 0; i < sl._o1.Length; i++)
                     {
-                        ll.AddBefore(c, new LinkedListNode<CharData>(new CharData() { Char = _o1[i] }));
+                        ll.AddBefore(c, new LinkedListNode<CharData>(new CharData() { Char = sl._o1[i] }));
                     }
 
-                    resume = new LinkedListNode<CharData>(new CharData() { Char = _c1[_c1.Length - 1] });
+                    resume = new LinkedListNode<CharData>(new CharData() { Char = sl._c1[sl._c1.Length - 1] });
                     ll.AddAfter(endAfter, resume);
-                    for (int i = _c1.Length - 2; i > -1; i--)
+                    for (int i = sl._c1.Length - 2; i > -1; i--)
                     {
-                        ll.AddAfter(endAfter, new LinkedListNode<CharData>(new CharData() { Char = _c1[i] }));
+                        ll.AddAfter(endAfter, new LinkedListNode<CharData>(new CharData() { Char = sl._c1[i] }));
                     }
                     c = resume;
                     return true;
@@ -294,16 +294,16 @@ namespace SearchLighterNET
                     {
                         return false;
                     }
-                    for (int i = 0; i < _o2.Length; i++)
+                    for (int i = 0; i < sl._o2.Length; i++)
                     {
-                        ll.AddBefore(c, new LinkedListNode<CharData>(new CharData() { Char = _o2[i] }));
+                        ll.AddBefore(c, new LinkedListNode<CharData>(new CharData() { Char = sl._o2[i] }));
                     }
 
-                    resume = new LinkedListNode<CharData>(new CharData() { Char = _c2[_c2.Length - 1] });
+                    resume = new LinkedListNode<CharData>(new CharData() { Char = sl._c2[sl._c2.Length - 1] });
                     ll.AddAfter(endAfter, resume);
-                    for (int i = _c2.Length - 2; i > -1; i--)
+                    for (int i = sl._c2.Length - 2; i > -1; i--)
                     {
-                        ll.AddAfter(endAfter, new LinkedListNode<CharData>(new CharData() { Char = _c2[i] }));
+                        ll.AddAfter(endAfter, new LinkedListNode<CharData>(new CharData() { Char = sl._c2[i] }));
                     }
                     c = resume;
                     return true;
@@ -349,27 +349,27 @@ namespace SearchLighterNET
                 return result;
             }
 
-            internal static string[] getSortedSearchTerms(string search)
+            internal static string[] getSortedSearchTerms(SearchLighter sl, string search)
             {
                 if (search == null)
                     return new string[0];
 
-                if (search.Length < _minHighlightExactMatchLength)
+                if (search.Length < sl._minHighlightExactMatchLength)
                     return new string[0];
 
                 search = SearchLighterUtils._convertStringToAsciiUppercase(search);
 
-                search = _removeEscapeMarkupFromRawSearch(search);
+                search = _removeEscapeMarkupFromRawSearch(sl, search);
 
-                if (search.Length < _minHighlightExactMatchLength)
+                if (search.Length < sl._minHighlightExactMatchLength)
                     return new string[0];
 
                 //todo: make javascript portable
                 var split =
-                    search.Split(_wordBoundaryCharacters, StringSplitOptions.RemoveEmptyEntries)
+                    search.Split(sl._wordBoundaryCharacters, StringSplitOptions.RemoveEmptyEntries)
                         .Distinct()
-                        .Where(x => x.Length >= _minHighlightWordLength)
-                        .Except(_skipWords)
+                        .Where(x => x.Length >= sl._minHighlightWordLength)
+                        .Except(sl._skipWords)
                         .OrderByDescending(x => x.Length)
                         .ThenBy(x => x).ToArray();
 
@@ -397,31 +397,31 @@ namespace SearchLighterNET
                     }
                 }
 
-                return _sanitizeEscapedSearches(result);
+                return _sanitizeEscapedSearches(sl, result);
             }
 
-            private static string _removeEscapeMarkupFromRawSearch(string search)
+            private static string _removeEscapeMarkupFromRawSearch(SearchLighter sl, string search)
             {
                 //todo: optimize and make JS portable
-                for (int i = 0; i < _escapeMarkupMap.Length; i++)
+                for (int i = 0; i < sl._escapeMarkupMap.Length; i++)
                 {
                     search = search
-                        .Replace(_escapeMarkupMap[i][0], "")
-                        .Replace(_escapeMarkupMap[i][0].ToUpper(), "");
+                        .Replace(sl._escapeMarkupMap[i][0], "")
+                        .Replace(sl._escapeMarkupMap[i][0].ToUpper(), "");
                 }
                 return search;
             }
 
-            private static string[] _sanitizeEscapedSearches(string[] search)
+            private static string[] _sanitizeEscapedSearches(SearchLighter sl, string[] search)
             {
                 //todo: optimize and make JS portable
                 for (int i = 0; i < search.Length; i++)
                 {
-                    for (int j = 0; j < _sanitizationMap.Length; j++)
+                    for (int j = 0; j < sl._sanitizationMap.Length; j++)
                     {
                         search[i] = search[i]
-                            .Replace(_sanitizationMap[j][0].ToUpper(), _sanitizationMap[j][1].ToUpper())
-                            .Replace(_sanitizationMap[j][0], _sanitizationMap[j][1].ToUpper());
+                            .Replace(sl._sanitizationMap[j][0].ToUpper(), sl._sanitizationMap[j][1].ToUpper())
+                            .Replace(sl._sanitizationMap[j][0], sl._sanitizationMap[j][1].ToUpper());
                     }
                 }
 
@@ -429,71 +429,71 @@ namespace SearchLighterNET
             }
         }
 
-        private static char[] _wordBoundaryCharacters = SearchLighterConfigurationTools.DefaultWordBoundaryCharacters();
-        private static string _o1 = SearchLighterConfigurationTools._defaultO1();
-        private static string _o2 = SearchLighterConfigurationTools._defaultO2();
-        private static string _c1 = SearchLighterConfigurationTools._defaultC1();
-        private static string _c2 = SearchLighterConfigurationTools._defaultC2();
-        private static char[] _br = SearchLighterConfigurationTools._defaultBr();
-        private static bool _shouldSanitizeAndEscape = true;
-        private static string[] _skipWords = SearchLighterConfigurationTools._defaultskipWords();
-        private static int _minHighlightWordLength = SearchLighterConfigurationTools._defaultMinHighlightWordLength();
-        private static int _minHighlightExactMatchLength = SearchLighterConfigurationTools._defaultMinHighlightExactMatchLength();
-        private static string[][] _escapeMarkupMap = SearchLighterConfigurationTools.DefaultLineBreakEscapeMarkupMap();
-        private static string[][] _sanitizationMap = SearchLighterConfigurationTools.DefaultAngleBracketSanitizationMap();
+        private char[] _wordBoundaryCharacters = SearchLighterConfigurationTools.DefaultWordBoundaryCharacters();
+        private string _o1 = SearchLighterConfigurationTools._defaultO1();
+        private string _o2 = SearchLighterConfigurationTools._defaultO2();
+        private string _c1 = SearchLighterConfigurationTools._defaultC1();
+        private string _c2 = SearchLighterConfigurationTools._defaultC2();
+        private char[] _br = SearchLighterConfigurationTools._defaultBr();
+        private bool _shouldSanitizeAndEscape = true;
+        private string[] _skipWords = SearchLighterConfigurationTools._defaultskipWords();
+        private int _minHighlightWordLength = SearchLighterConfigurationTools._defaultMinHighlightWordLength();
+        private int _minHighlightExactMatchLength = SearchLighterConfigurationTools._defaultMinHighlightExactMatchLength();
+        private string[][] _escapeMarkupMap = SearchLighterConfigurationTools.DefaultLineBreakEscapeMarkupMap();
+        private string[][] _sanitizationMap = SearchLighterConfigurationTools.DefaultAngleBracketSanitizationMap();
 
-        public static void SetShouldSanitizeAndEscape(bool sanitizeAndEscape)
+        public void SetShouldSanitizeAndEscape(bool sanitizeAndEscape)
         {
             _shouldSanitizeAndEscape = sanitizeAndEscape;
         }
 
-        public static void SetExactMatchOpenMarkup(string s)
+        public void SetExactMatchOpenMarkup(string s)
         {
             _o1 = s ?? "";
         }
 
-        public static void SetExactMatchCloseMarkup(string s)
+        public void SetExactMatchCloseMarkup(string s)
         {
             _c1 = s ?? "";
         }
 
-        public static void SetPartialMatchOpenMarkup(string s)
+        public void SetPartialMatchOpenMarkup(string s)
         {
             _o2 = s ?? "";
         }
 
-        public static void SetPartialMatchCloseMarkup(string s)
+        public void SetPartialMatchCloseMarkup(string s)
         {
             _c2 = s ?? "";
         }
 
-        public static void SetWordBoundaryCharacters(char[] chars)
+        public void SetWordBoundaryCharacters(char[] chars)
         {
             _wordBoundaryCharacters = chars ?? new char[0];
             Array.Sort(_wordBoundaryCharacters);
         }
 
-        public static void SetEscapeMarkupMap(string[][] d)
+        public void SetEscapeMarkupMap(string[][] d)
         {
             _escapeMarkupMap = d ?? new string[0][];
         }
 
-        public static void SetSanitizationMap(string[][] d)
+        public void SetSanitizationMap(string[][] d)
         {
             _sanitizationMap = d ?? new string[0][];
         }
 
-        public static void HighlighterClearSkipWords()
+        public void HighlighterClearSkipWords()
         {
             _skipWords = new string[0];
         }
 
-        public static void HighlighterResetSkipWords()
+        public void HighlighterResetSkipWords()
         {
             _skipWords = SearchLighterConfigurationTools._defaultskipWords();
         }
 
-        public static void HighlighterResetToDefaults()
+        public void HighlighterResetToDefaults()
         {
             _shouldSanitizeAndEscape = true;
             _wordBoundaryCharacters = SearchLighterConfigurationTools.DefaultWordBoundaryCharacters();
@@ -509,7 +509,7 @@ namespace SearchLighterNET
             _o2 = SearchLighterConfigurationTools._defaultO2();
         }
 
-        public static void HighlighterAddSkipWords(params string[] skipWords)
+        public void HighlighterAddSkipWords(params string[] skipWords)
         {
             skipWords = SearchLighterUtils._getDistinctUppercaseStrings(skipWords);
 
@@ -529,20 +529,20 @@ namespace SearchLighterNET
             Array.Sort(_skipWords);
         }
 
-        public static void HighlighterSetWordMinLength(int length)
+        public void HighlighterSetWordMinLength(int length)
         {
             _minHighlightWordLength = length;
         }
 
-        public static void HighlighterSetExactMatchMinLength(int length)
+        public void HighlighterSetExactMatchMinLength(int length)
         {
             _minHighlightExactMatchLength = length;
         }
 
-        public static string GetDisplayString(string html, string find = "")
+        public string GetDisplayString(string html, string find = "")
         {
             //get sanitized case-insensitive length:alpha sorted distinct search map from find
-            var searchMap = SearchLighterUtils.getSortedSearchTerms(find);
+            var searchMap = SearchLighterUtils.getSortedSearchTerms(this, find);
             bool shouldMatchAndHighlight = searchMap.Length > 0;
 
             var ll = SearchLighterUtils.convertStringToLinkedList(html);
@@ -555,7 +555,7 @@ namespace SearchLighterNET
             while (c != null)
             {
                 var ch = c.Value.Char;
-                SearchLighterUtils._escapeOrSanitize(ref c, ll);
+                SearchLighterUtils._escapeOrSanitize(this, ref c, ll);
                 c = c.Next;
             }
 
@@ -566,7 +566,7 @@ namespace SearchLighterNET
                 while (c != null)
                 {
 
-                    SearchLighterUtils._matchAndHighlight(searchMap, ll, ref c);
+                    SearchLighterUtils._matchAndHighlight(this, searchMap, ll, ref c);
                     c = c.Next;
                 }
             }
