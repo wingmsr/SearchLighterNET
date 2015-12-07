@@ -21,7 +21,7 @@ C# Usage:
             string normal = new SearchLighter().GetDisplayString(text);
 			//...
 
-//(3)	Advanced usage: Configure any non default settings via static-method calls, e.g.:
+//(3)	Advanced usage: Configure any non default settings via public setters, e.g.:
 
             /* Note: The HTML-friendly default "escape-markup" includes the most common variants of new-line characters and line-break HTML.
              * Other markup is partially HTML-encoded by default, i.e. "angle-brackets" are HTML-encoded to "sanitize" the output.
