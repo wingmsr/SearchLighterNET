@@ -116,21 +116,21 @@ namespace SearchLighterNetTests.Tests
         [TestCase(2, 2, "a ab abc abcd abcde abcdef", "b", "a ab abc abcd abcde abcdef")]
         [TestCase(1, 2, "a ab abc abcd abcde abcdef", "b", "a a1b11 a1b11c a1b11cd a1b11cde a1b11cdef")]
 
-        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc", "a ab a1bc11 a1bc11d a1bc11de a1bc11def")]
+        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc", "a a2b22 a1bc11 a1bc11d a1bc11de a1bc11def")]
         [TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc", "a ab a1bc11 a1bc11d a1bc11de a1bc11def")]
         [TestCase(3, 3, "a ab abc abcd abcde abcdef", "bc", "a ab abc abcd abcde abcdef")]
-        [TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc", "a ab a1bc11 a1bc11d a1bc11de a1bc11def")]
-        [TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc", "a ab a1bc11 a1bc11d a1bc11de a1bc11def")]
+        [TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc", "a a2b22 a1bc11 a1bc11d a1bc11de a1bc11def")]
+        [TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc", "a a2b22 a1bc11 a1bc11d a1bc11de a1bc11def")]
 
-        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bcd", "a ab abc a1bcd11 a1bcd11e a1bcd11ef")]
-        [TestCase(2, 2, "a ab abc abcd abcde abcdef", "bcd", "a ab abc a1bcd11 a1bcd11e a1bcd11ef")]
+        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bcd", "a a2b22 a2bc22 a1bcd11 a1bcd11e a1bcd11ef")]
+        [TestCase(2, 2, "a ab abc abcd abcde abcdef", "bcd", "a ab a2bc22 a1bcd11 a1bcd11e a1bcd11ef")]
         [TestCase(3, 3, "a ab abc abcd abcde abcdef", "bcd", "a ab abc a1bcd11 a1bcd11e a1bcd11ef")]
         [TestCase(4, 4, "a ab abc abcd abcde abcdef", "bcd", "a ab abc abcd abcde abcdef")]
         [TestCase(5, 5, "a ab abc abcd abcde abcdef", "bcd", "a ab abc abcd abcde abcdef")]
-        [TestCase(1, 2, "a ab abc abcd abcde abcdef", "bcd", "a ab abc a1bcd11 a1bcd11e a1bcd11ef")]
-        [TestCase(1, 5, "a ab abc abcd abcde abcdef", "bcd", "a ab abc a1bcd11 a1bcd11e a1bcd11ef")]
+        [TestCase(1, 2, "a ab abc abcd abcde abcdef", "bcd", "a a2b22 a2bc22 a1bcd11 a1bcd11e a1bcd11ef")]
+        [TestCase(1, 5, "a ab abc abcd abcde abcdef", "bcd", "a a2b22 a2bc22 a1bcd11 a1bcd11e a1bcd11ef")]
 
-        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bcde", "a ab abc abcd a1bcde11 a1bcde11f")]
+        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bcde", "a a2b22 a2bc22 a2bcd22 a1bcde11 a1bcde11f")]
         [TestCase(4, 4, "a ab abc abcd abcde abcdef", "bcde", "a ab abc abcd a1bcde11 a1bcde11f")]
         [TestCase(5, 5, "a ab abc abcd abcde abcdef", "bcde", "a ab abc abcd abcde abcdef")]
 
@@ -144,62 +144,21 @@ namespace SearchLighterNetTests.Tests
         [TestCase(3, 3, "a a ab abc abcd abcde abcdef", "a ab", "a 1a ab11 abc abcd abcde abcdef")]
 
         [TestCase(1, 1, "abc a", "bc a", "2a221bc a11", TestName = "'bc a' edge case - mini")]
-        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc a", "2a22 2a22b 2a221bc a112bc22d 2a222bc22de 2a222bc22def", TestName = "'bc a' edge case")]
-        //[TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(3, 3, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(4, 4, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(5, 5, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 4, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc a", "a ab abc abcd abcde abcdef")]
+        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc a", "2a22 2a222b22 2a221bc a112bc22d 2a222bc22de 2a222bc22def", TestName = "'bc a' edge case")]
 
-
-        //[TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(3, 3, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(4, 4, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(5, 5, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 4, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc ab", "a ab abc abcd abcde abcdef")]
-
-        //[TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(3, 3, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(4, 4, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(5, 5, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 4, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc abc", "a ab abc abcd abcde abcdef")]
-
-
-        //[TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(3, 3, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(4, 4, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(5, 5, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 4, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-        //[TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc abcd", "a ab abc abcd abcde abcdef")]
-
-
-        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc abcd a", "2a22 2a22b 2a221bc abcd a112bc22de 2abcd22ef", TestName = "'bc abcd a' edge case")]
-        [TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc abcd a", "a ab a1bc abcd a112bc22de 2abcd22ef")]
+        [TestCase(1, 1, "a ab abc abcd abcde abcdef", "bc abcd a", "2a22 2ab22 2a221bc abcd a112bc22de 2abcd22ef", TestName = "'bc abcd a' edge case")]
+        [TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc abcd a", "a 2ab22 a1bc abcd a112bc22de 2abcd22ef")]
         [TestCase(9, 9, "a ab abc abcd abcde abcdef", "bc abcd a", "a ab a1bc abcd a11bcde abcdef")]
         [TestCase(10, 10, "a ab abc abcd abcde abcdef", "bc abcd a", "a ab abc abcd abcde abcdef")]
-        [TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc abcd a", "a ab a1bc abcd a112bc22de 2abcd22ef")]
-        [TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc abcd a", "a ab a1bc abcd a11bcde 2abcd22ef")]
+        [TestCase(1, 2, "a ab abc abcd abcde abcdef", "bc abcd a", "2a22 2ab22 a1bc abcd a112bc22de 2abcd22ef")]
+        [TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc abcd a", "2a22 2ab22 a1bc abcd a11bcde 2abcd22ef")]
         [TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc abcd a", "a ab a1bc abcd a11bcde abcdef")]
 
         [TestCase(2, 2, "a ab abc abcd abcde abcdef", "bc abcd ab", "a 2ab22 a1bc abcd ab11cde 2abcd22ef" , TestName = "IMPORTANT - secondary does not preempt exact match and alpha precedence of ab over bc")]
         [TestCase(3, 3, "a ab abc abcd abcde abcdef", "bc abcd ab", "a ab a1bc abcd ab11cde 2abcd22ef")]
         [TestCase(10, 10, "a ab abc abcd abcde abcdef", "bc abcd ab", "a ab a1bc abcd ab11cde abcdef")]
         [TestCase(11, 11, "a ab abc abcd abcde abcdef", "bc abcd ab", "a ab abc abcd abcde abcdef")]
-        [TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc abcd ab", "a ab a1bc abcd ab11cde 2abcd22ef")]
+        [TestCase(1, 3, "a ab abc abcd abcde abcdef", "bc abcd ab", "2a22 2ab22 a1bc abcd ab11cde 2abcd22ef")]
         [TestCase(1, 5, "a ab abc abcd abcde abcdef", "bc abcd ab", "a ab a1bc abcd ab11cde abcdef")]
         public void CanGetHighlightedStringWithMinimumCharThresholds(int minExactMatchLength, int minWordMatchLength, string look, string find, string expected)
         {
@@ -266,12 +225,24 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("determine", "Never predetermined.", "2determine22")]
-        [TestCase("determine this.", "Never predetermined.", "2determine22 this.")]
         [TestCase("Anticipate", "anticipated", "2Anticipate22")]
         [TestCase("Anticipate green.", "anticipated", "2Anticipate22 green.")]
         [TestCase("Anticipate green.", "I never anticipated red.", "2Anticipate22 green.")]
-        public void CanHighlightSubstringsOfSearchWords(string initial, string find, string expected)
+        public void CanHighlightInitialSubstringsOfSearchWords(string initial, string find, string expected)
+        {
+            var sl = new SearchLighter();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
+            var result = sl.GetDisplayString(initial, find);
+
+            expected.ShouldEqualCaseSensitive(result);
+        }
+
+        [TestCase("determine", "Never predetermined.", "determi2ne22")]
+        [TestCase("determine this.", "Never predetermined.", "determi2ne22 this.")]
+        public void CanNotHighlightMiddlingSubstringsOfSearchWordsDueToNoLookAhead(string initial, string find, string expected)
         {
             var sl = new SearchLighter();
             sl.SetExactMatchOpenMarkup("1");
