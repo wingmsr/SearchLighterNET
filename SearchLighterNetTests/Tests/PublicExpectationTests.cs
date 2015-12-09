@@ -21,7 +21,8 @@ namespace SearchLighterNetTests.Tests
             string text = "The quick brown fox\r\njumped over<BR/>and over the <lazy>dog</lazy>.";
             string highlighted = new SearchLighter().GetDisplayString(text, find);
 
-            string expectedOutput = "The quick brown fox<br /><span class=\"hlt1\">jumped over</span><br />and <span class=\"hlt2\">over</span> the &lt;lazy&gt;dog&lt;/lazy&gt;.";
+            string expectedOutput =
+                "The quick brown fox<br /><span class=\"hlt1\">jumped over</span><br />and <span class=\"hlt2\">over</span> the &lt;lazy&gt;dog&lt;/lazy&gt;.";
             Assert.AreEqual(string.Compare(highlighted, expectedOutput, StringComparison.CurrentCulture), 0);
         }
 
@@ -248,6 +249,47 @@ namespace SearchLighterNetTests.Tests
         {
             var t = new SearchLighter().GetDisplayString(initial, "");
             expected.ShouldEqualCaseSensitive(t);
+        }
+
+        [TestCase("Anticipated green.", "anticipate", "1Anticipate11d green.")]
+        [TestCase("Anticipated green.", "I never anticipate red.", "2Anticipate22d green.")]
+        public void CanHighlightSearchWordSubstrings(string initial, string find, string expected)
+        {
+            var sl = new SearchLighter();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
+            var result = sl.GetDisplayString(initial, find);
+
+            expected.ShouldEqualCaseSensitive(result);
+        }
+
+        [TestCase("Anticipate", "anticipated", "2Anticipate22")]
+        [TestCase("Anticipate green.", "anticipated", "2Anticipate22 green.")]
+        [TestCase("Anticipate green.", "I never anticipated red.", "2Anticipate22 green.")]
+        public void CanHighlightSubstringsOfSearchWords(string initial, string find, string expected)
+        {
+            var sl = new SearchLighter();
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
+            var result = sl.GetDisplayString(initial, find);
+
+            expected.ShouldEqualCaseSensitive(result);
+        }
+
+        //[TestCase("Anticipated green.", "I am anticipating green.", "2Anticipat22ed green.", Ignore = true, IgnoreReason = "Under review.")]
+        public void CanHighlightSignificantButInexactSubstringsOfSearchWords(string initial, string find, string expected)
+        {
+            //E.g. 'anticipat' in 'anticipated' when search for 'anticipating'.
+            var sl = new SearchLighter();
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
+            var result = sl.GetDisplayString(initial, find);
+
+            expected.ShouldEqualCaseSensitive(result);
         }
     }
 }
