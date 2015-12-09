@@ -198,20 +198,32 @@ namespace SearchLighterNET
                 return skipWords;
             }
 
-            private static bool _shouldHighlightCurrentMapItem(string[] searchMap, int i, ref LinkedListNode<CharData> endAfter)
+            private static bool _shouldHighlightCurrentMapItem(string[] searchMap, int i, ref LinkedListNode<CharData> endAfter, int minLength, out bool partial)
             {
                 for (int j = 1; j < searchMap[i].Length; j++)
                 {
-                    if (endAfter.Next == null || searchMap[i][j] != endAfter.Next.Value.Char)
+                    if (endAfter.Next == null)
                     {
+                        partial = i < (searchMap[i].Length - 1);
+                        return j >= minLength;
+                    }
+                    if (searchMap[i][j] != endAfter.Next.Value.Char)
+                    {
+                        if (endAfter.Next.Value.Char == ' ')//not using full word-boundary characters as a pragmatic optimization
+                        {
+                            partial = true;
+                            return j >= minLength;
+                        }
+                        partial = false;
                         return false;
                     }
                     endAfter = endAfter.Next;
                 }
+                partial = false;
                 return true;
             }
 
-            private static bool _shouldHighlightAnyMapItemAtCurrentChar(SearchLighter sl, string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, int i)
+            private static bool _shouldHighlightAnyMapItemAtCurrentChar(SearchLighter sl, string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, int i, int minLength)
             {
                 if (searchMap[i][0] != c.Value.Char)
                     return false;
@@ -222,9 +234,10 @@ namespace SearchLighterNET
                 }
 
                 var endAfter = c;
-                if (SearchLighterUtils._shouldHighlightCurrentMapItem(searchMap, i, ref endAfter))
+                bool partial;
+                if (SearchLighterUtils._shouldHighlightCurrentMapItem(searchMap, i, ref endAfter, minLength, out partial))
                 {
-                    return _applyHighlight(sl, i == 0, ll, ref c, ref endAfter, searchMap[i], searchMap[0]);
+                    return _applyHighlight(sl, !partial && i == 0, ll, ref c, ref endAfter, searchMap[i], searchMap[0]);
                 }
                 else
                 {
@@ -232,11 +245,11 @@ namespace SearchLighterNET
                 }
             }
 
-            internal static void _matchAndHighlight(SearchLighter sl, string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c)
+            internal static void _matchAndHighlight(SearchLighter sl, string[] searchMap, LinkedList<CharData> ll, ref LinkedListNode<CharData> c, int minLength)
             {
                 for (int i = 0; i < searchMap.Length; i++)
                 {
-                    if (SearchLighterUtils._shouldHighlightAnyMapItemAtCurrentChar(sl, searchMap, ll, ref c, i))
+                    if (SearchLighterUtils._shouldHighlightAnyMapItemAtCurrentChar(sl, searchMap, ll, ref c, i, minLength))
                     {
                         return;
                     }
@@ -565,8 +578,7 @@ namespace SearchLighterNET
                 c = ll.First;
                 while (c != null)
                 {
-
-                    SearchLighterUtils._matchAndHighlight(this, searchMap, ll, ref c);
+                    SearchLighterUtils._matchAndHighlight(this, searchMap, ll, ref c, _minHighlightExactMatchLength);
                     c = c.Next;
                 }
             }

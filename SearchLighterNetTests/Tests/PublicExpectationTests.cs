@@ -61,9 +61,9 @@ namespace SearchLighterNetTests.Tests
         [TestCase("", ".", "", TestName = "empty dot")]
         [TestCase(".", ".", "11.111", TestName = "dot dot - search should respect exact match for punctuation/word boundaries")]
         [TestCase("... ...", "...", "11...111 11...111")]
-        [TestCase("xxxxxx", "xxxx", "11xxxx111xx")]
+        [TestCase("xxxxxx", "xxxx", "11xxxx1112222xx22222")]
         [TestCase("xxxxxxxx", "xxxx", "11xxxx11111xxxx111")]
-        [TestCase(".....", "...", "11...111..", TestName = "word-boundary characters are excluded from 3 char threshold due to the fact that they always yield a 'word' boundary result (1)")]
+        [TestCase(".....", "...", "11...1112222..22222", TestName = "word-boundary characters are excluded from 3 char threshold due to the fact that they always yield a 'word' boundary result (1)")]
         [TestCase("-.,-.,", "-.,", "11-.,11111-.,111", TestName = "word-boundary characters are excluded from 3 char threshold due to the fact that they always yield a 'word' boundary result (2)")]
         [TestCase("......", "...", "11...11111...111", TestName = "tandem repeat dots; do not orphan tail highlight closing tag")]
         public void CanGetHighlightedStringBasic(string look, string find, string expected)
@@ -251,6 +251,7 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(t);
         }
 
+        [TestCase("Never predetermined.", "determine", "Never pre1determine11d.")]
         [TestCase("Anticipated green.", "anticipate", "1Anticipate11d green.")]
         [TestCase("Anticipated green.", "I never anticipate red.", "2Anticipate22d green.")]
         public void CanHighlightSearchWordSubstrings(string initial, string find, string expected)
@@ -265,6 +266,8 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
+        [TestCase("determine", "Never predetermined.", "2determine22")]
+        [TestCase("determine this.", "Never predetermined.", "2determine22 this.")]
         [TestCase("Anticipate", "anticipated", "2Anticipate22")]
         [TestCase("Anticipate green.", "anticipated", "2Anticipate22 green.")]
         [TestCase("Anticipate green.", "I never anticipated red.", "2Anticipate22 green.")]

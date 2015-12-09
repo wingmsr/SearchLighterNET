@@ -31,8 +31,8 @@ namespace SearchLighterNetTests.Tests
             (s.Elapsed.TotalMilliseconds < 3000).ShouldBeTrue();
         }
 
-        [TestCase("war and peace_10K.txt", 800, "A young officer with a bewildered and pained expression on his face stepped away from the man and looked round inquiringly at the adjutant as he rode by.")]
-        [TestCase("war and peace.txt", 5000, "A young officer with a bewildered and pained expression on his face stepped away from the man and looked round inquiringly at the adjutant as he rode by.")]    
+        [TestCase("war and peace_10K.txt", 1000, "A young officer with a bewildered and pained expression on his face stepped away from the man and looked round inquiringly at the adjutant as he rode by.")]
+        [TestCase("war and peace.txt", 8000, "A young officer with a bewildered and pained expression on his face stepped away from the man and looked round inquiringly at the adjutant as he rode by.")]    
         public void PerformanceTestWarAndPeace(string file, int msecLimit, string find)
         {
             string f0;
