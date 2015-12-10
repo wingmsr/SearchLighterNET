@@ -126,12 +126,12 @@ namespace SearchLighterNET
 
         internal static int _defaultMinHighlightWordLength()
         {
-            return 2;
+            return 3;
         }
 
         internal static int _defaultMinHighlightExactMatchLength()
         {
-            return 1;
+            return 2;
         }
     }
 }

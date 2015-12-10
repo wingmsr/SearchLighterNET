@@ -69,6 +69,8 @@ namespace SearchLighterNetTests.Tests
         public void CanGetHighlightedStringBasic(string look, string find, string expected)
         {
             var sl = new SearchLighter();
+            sl.HighlighterSetExactMatchMinLength(1);
+            sl.HighlighterSetWordMinLength(2);
             sl.SetExactMatchOpenMarkup("11");
             sl.SetExactMatchCloseMarkup("111");
             sl.SetPartialMatchOpenMarkup("2222");
