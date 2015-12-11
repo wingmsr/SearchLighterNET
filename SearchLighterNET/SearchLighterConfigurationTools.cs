@@ -133,5 +133,10 @@ namespace SearchLighterNET
         {
             return 2;
         }
+
+        internal static int _defaultMinHighlightSubstringMatchLength()
+        {
+            return 5;
+        }
     }
 }

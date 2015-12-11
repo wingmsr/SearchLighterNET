@@ -452,6 +452,7 @@ namespace SearchLighterNET
         private string[] _skipWords = SearchLighterConfigurationTools._defaultskipWords();
         private int _minHighlightWordLength = SearchLighterConfigurationTools._defaultMinHighlightWordLength();
         private int _minHighlightExactMatchLength = SearchLighterConfigurationTools._defaultMinHighlightExactMatchLength();
+        private int _minHighlightSubstringMatchLength = SearchLighterConfigurationTools._defaultMinHighlightSubstringMatchLength();
         private string[][] _escapeMarkupMap = SearchLighterConfigurationTools.DefaultLineBreakEscapeMarkupMap();
         private string[][] _sanitizationMap = SearchLighterConfigurationTools.DefaultAngleBracketSanitizationMap();
 
@@ -518,6 +519,7 @@ namespace SearchLighterNET
             _c2 = SearchLighterConfigurationTools._defaultC2();
             _minHighlightExactMatchLength = SearchLighterConfigurationTools._defaultMinHighlightExactMatchLength();
             _minHighlightWordLength = SearchLighterConfigurationTools._defaultMinHighlightWordLength();
+            _minHighlightSubstringMatchLength = SearchLighterConfigurationTools._defaultMinHighlightSubstringMatchLength();
             _o1 = SearchLighterConfigurationTools._defaultO1();
             _o2 = SearchLighterConfigurationTools._defaultO2();
         }
@@ -552,6 +554,11 @@ namespace SearchLighterNET
             _minHighlightExactMatchLength = length;
         }
 
+        public void HighlighterSetSubstringMatchMinLength(int length)
+        {
+            _minHighlightSubstringMatchLength = length;
+        }
+
         public string GetDisplayString(string html, string find = "")
         {
             //get sanitized case-insensitive length:alpha sorted distinct search map from find
@@ -578,7 +585,7 @@ namespace SearchLighterNET
                 c = ll.First;
                 while (c != null)
                 {
-                    SearchLighterUtils._matchAndHighlight(this, searchMap, ll, ref c, _minHighlightExactMatchLength);
+                    SearchLighterUtils._matchAndHighlight(this, searchMap, ll, ref c, _minHighlightSubstringMatchLength);
                     c = c.Next;
                 }
             }

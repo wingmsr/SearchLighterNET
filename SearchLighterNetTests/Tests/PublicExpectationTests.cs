@@ -69,6 +69,7 @@ namespace SearchLighterNetTests.Tests
         public void CanGetHighlightedStringBasic(string look, string find, string expected)
         {
             var sl = new SearchLighter();
+            sl.HighlighterSetSubstringMatchMinLength(1);
             sl.HighlighterSetExactMatchMinLength(1);
             sl.HighlighterSetWordMinLength(2);
             sl.SetExactMatchOpenMarkup("11");
@@ -165,7 +166,7 @@ namespace SearchLighterNetTests.Tests
         public void CanGetHighlightedStringWithMinimumCharThresholds(int minExactMatchLength, int minWordMatchLength, string look, string find, string expected)
         {
             var sl = new SearchLighter();
-            sl.HighlighterResetToDefaults();
+            sl.HighlighterSetSubstringMatchMinLength(minExactMatchLength);
             sl.HighlighterSetExactMatchMinLength(minExactMatchLength);
             sl.HighlighterSetWordMinLength(minWordMatchLength);
             sl.HighlighterClearSkipWords();
@@ -227,12 +228,13 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("Anticipate", "anticipated", "2Anticipate22")]
-        [TestCase("Anticipate green.", "anticipated", "2Anticipate22 green.")]
-        [TestCase("Anticipate green.", "I never anticipated red.", "2Anticipate22 green.")]
-        public void CanHighlightInitialSubstringsOfSearchWords(string initial, string find, string expected)
+        [TestCase(10, "Anticipate", "anticipated", "2Anticipate22")]
+        [TestCase(10, "Anticipate green.", "anticipated", "2Anticipate22 green.")]
+        [TestCase(10, "Anticipate green.", "I never anticipated red.", "2Anticipate22 green.")]
+        public void CanHighlightInitialSubstringsOfSearchWords(int minSubstringLength, string initial, string find, string expected)
         {
             var sl = new SearchLighter();
+            sl.HighlighterSetSubstringMatchMinLength(minSubstringLength);
             sl.SetExactMatchOpenMarkup("1");
             sl.SetExactMatchCloseMarkup("11");
             sl.SetPartialMatchOpenMarkup("2");
@@ -242,8 +244,24 @@ namespace SearchLighterNetTests.Tests
             expected.ShouldEqualCaseSensitive(result);
         }
 
-        [TestCase("determine", "Never predetermined.", "determi2ne22")]
-        [TestCase("determine this.", "Never predetermined.", "determi2ne22 this.")]
+        [TestCase(11, "Anticipate", "anticipated", "Anticipate")]
+        [TestCase(11, "Anticipate green.", "anticipated", "Anticipate green.")]
+        [TestCase(11, "Anticipate green.", "I never anticipated red.", "Anticipate green.")]
+        public void DoesNotHighlightInitialSubstringsOfSearchWordsWhereLessThanConfiguredMinumumSubstringLength(int minSubstringLength, string initial, string find, string expected)
+        {
+            var sl = new SearchLighter();
+            sl.HighlighterSetSubstringMatchMinLength(minSubstringLength);
+            sl.SetExactMatchOpenMarkup("1");
+            sl.SetExactMatchCloseMarkup("11");
+            sl.SetPartialMatchOpenMarkup("2");
+            sl.SetPartialMatchCloseMarkup("22");
+            var result = sl.GetDisplayString(initial, find);
+
+            expected.ShouldEqualCaseSensitive(result);
+        }
+
+        [TestCase("determine", "Never predetermined.", "determine")]
+        [TestCase("determine this.", "Never predetermined.", "determine this.")]
         public void CanNotHighlightMiddlingSubstringsOfSearchWordsDueToNoLookAhead(string initial, string find, string expected)
         {
             var sl = new SearchLighter();
